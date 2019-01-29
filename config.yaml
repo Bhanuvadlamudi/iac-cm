@@ -1,0 +1,21 @@
+inputs:
+  key_name: "key.pem"
+  provider: 
+    aws_access_key_id: "a235rgfeded123"
+    aws_security_key_id: " dfbjkbfjkbf"
+    region: "jdfhwuf"
+  resources:
+    -
+      name: "hellooo"
+      ami: "2jh2h"
+      key_name: "key.pem"
+      instance_type: " "
+
+
+
+
+
+   
+
+    
+
