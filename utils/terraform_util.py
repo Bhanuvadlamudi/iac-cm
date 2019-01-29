@@ -26,7 +26,7 @@ class Resource:
 			self.instance_type = str( rdict['instance_type'])
 
 		self.tags = Tags({'Name': self.name})
-		self.vpc_security_group_ids = Vpc({'vpc_security_group_ids': 'aws_security_group.Auto.id'})
+		self.vpc_security_group_ids = Vpc(["${aws_security_group.Auto.id}"])
 		self.connection = Connection({
 			                'type': "ssh",
 			                'user': "ubuntu",
@@ -41,8 +41,9 @@ class Resource:
 				+ "\n\tkey_name = \"" + self.key_name + "\"" 
 				+ "\n\tinstance_type = \"" + self.instance_type + "\""
 				+ "\n\t"+str(self.tags)
+				+ "\n\t"+str(self.vpc_security_group_ids)
 				+ "\n\t"+str(self.connection)
-				+ "\n\t"+str(self.provisioner)
+				#+ "\n\t"+str(self.provisioner)
 				+ "\n}"
 				) 
 
@@ -84,20 +85,24 @@ class Connection:
 
 
 class Vpc:
-	def __init__(self,vdict):
-		self.vpc_security_group_ids = str( vdict['vpc_security_group_ids'])
+	def __init__(self,ids):
+		self.ids = ids
 
 	def __str__(self):
-		return "vpc_security_group_ids = \"${" + self.vpc_security_group_ids + "}\""
+		return "vpc_security_group_ids = "+ str(self.ids)
 
 
 
 
 class Variable:
-  def __init__(self,name,value):
-  	self.name = name
-  	self.value = default
+  def __init__(self,vdict):
+  	self.name = vdict['name']
+  	self.default = vdict['default']
 
   def __str__(self):
-  	return 
+  	return ("variable " 
+				+ "\""+self.name+"\"{"
+				+ "\n\tdefault = \"" + self.default + "\""   
+				+ "\n}"
+			)
 
