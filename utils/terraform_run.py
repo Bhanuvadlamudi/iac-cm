@@ -4,6 +4,7 @@ import os
 
 MAIN_FILE = "./terraform/main.tf"
 VAR_FILE  = "./terraform/variable.tf"
+OUT_FILE  = "./terraform/output.tf"
 
 """
 """
@@ -12,11 +13,12 @@ def terr_intialize(config):
 	#Remove if files exits
 	delete_file(MAIN_FILE)
 	delete_file(VAR_FILE)
+	delete_file(OUT_FILE)
 
 
 	#---------------adding to var.tf ------------
 	key_name = config['inputs']['key_name']
-	add_variable('ssh_key','terr.pem')
+	add_variable('ssh_key','hello.pem')
 	add_variable('http_port','80')
 	add_variable('ssh_port','22')
 
@@ -44,11 +46,14 @@ def parse_resources(resources, key_name):
 		parse_resource(resource, key_name)
 
 
-def parse_resource(rdict, key_name):
-	#print (rdict)
-	rdict['key_name']= key_name
-	resource = terraform_util.Resource(rdict)
-	append_to_file(MAIN_FILE, str(resource) )
+def parse_resource(resource, key_name):
+	#print (resource)
+	resource['key_name']= key_name
+	resource_out = terraform_util.Resource(resource)
+	append_to_file(MAIN_FILE, str(resource_out) )
+
+	output_var = terraform_util.Output(resource['name'])
+	append_to_file(OUT_FILE, str(output_var) )
 
 
 '''

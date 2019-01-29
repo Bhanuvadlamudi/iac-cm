@@ -2,14 +2,14 @@
 class Provider:
 
 	def __init__(self, pdict):
-		self.aws_access_key_id = str( pdict['aws_access_key_id'])
-		self.aws_security_key_id = str( pdict['aws_security_key_id'])
+		self.access_key = str( pdict['access_key'])
+		self.secret_key = str( pdict['secret_key'])
 		self.region = str( pdict['region'])
 
 	def __str__(self):
 		return ("provider \"aws\" {" 
-				+ "\n\taws_access_key_id = \"" + self.aws_access_key_id + "\""
-				+ "\n\taws_security_key_id = \"" + self.aws_security_key_id + "\"" 
+				+ "\n\taccess_key = \"" + self.access_key + "\""
+				+ "\n\tsecret_key = \"" + self.secret_key + "\"" 
 				+ "\n\tregion = \"" + self.region + "\""
 				+ "\n}"
 				) 
@@ -26,7 +26,7 @@ class Resource:
 			self.instance_type = str( rdict['instance_type'])
 
 		self.tags = Tags({'Name': self.name})
-		self.vpc_security_group_ids = Vpc(["${aws_security_group.Auto.id}"])
+		self.vpc_security_group_ids = Vpc(["${aws_security_group.Auto2.id}"])
 		self.connection = Connection({
 			                'type': "ssh",
 			                'user': "ubuntu",
@@ -89,7 +89,12 @@ class Vpc:
 		self.ids = ids
 
 	def __str__(self):
-		return "vpc_security_group_ids = "+ str(self.ids)
+		output = "vpc_security_group_ids = ["
+		for id in self.ids:
+			output = output + "\""+ str(id) + "\","
+		output = output[:-1]
+		output = output+ "]"
+		return output
 
 
 
@@ -106,3 +111,18 @@ class Variable:
 				+ "\n}"
 			)
 
+class Output:
+  def __init__(self,instance_name):
+  	self.name = instance_name
+
+  def __str__(self):
+  	return ("output " 
+				+ "\""+self.name+"_ip\"{"
+				+ "\n\tvalue = \"${aws_instance." + self.name + ".public_ip}\""  
+				+ "\n}"
+			)
+"""
+output "ip2" {
+ value =  "${aws_instance.Auto.public_ip}"
+}
+"""
