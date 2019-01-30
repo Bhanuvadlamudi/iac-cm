@@ -1,0 +1,38 @@
+---
+- hosts: all
+  become: True
+  remote_user: ubuntu
+  gather_facts: False
+  tasks:
+  
+    - name: Update linux
+      become: True
+      become_method: sudo
+      remote_user: ubuntu
+      raw: apt-get update  && apt-get install -y python python-pip
+
+    - name: "install nginx"
+      become: True
+      apt: name=nginx state=present
+    
+    -
+      name: "install flask"
+      pip: name=flask state=present
+      become: True
+    
+    - 
+      name: "Install git"
+      apt: name=git state=present
+
+
+    - name: "Deploy app"
+      include_tasks: deploy.yaml
+
+    - name: "Configure nginx"
+      include_tasks: nginx.yaml
+
+  handlers:
+    - name: restart nginx
+      action: service name=nginx state=restarted 
+      become: True
+      become_method: sudo

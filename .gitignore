@@ -1,2 +1,4 @@
+hello.pem
 terr.pem
-utls/__pycache__
+utils/__pycache__/
+terraform/.terraform
