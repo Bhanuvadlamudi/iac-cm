@@ -4,7 +4,7 @@
 
   -
     name: "create nginx site config"
-    action: file src=/src/testapp/flask.conf dest=/etc/nginx/sites-available/flask.conf state=hard
+    action: file src=nginx.conf dest=/etc/nginx/sites-available/nginx.conf state=hard
     notify:
       - restart nginx
     
