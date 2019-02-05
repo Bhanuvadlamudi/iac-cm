@@ -1,6 +1,3 @@
-variable "ssh_key"{
-	default = "terr.pem"
-}
 variable "http_port"{
 	default = "80"
 }

@@ -13,4 +13,4 @@
     become: True
     become_method: sudo
     remote_user: ubuntu
-    shell: "nohup python /src/testapp/test.py &"
+    shell: "nohup python3 /src/testapp/test.py &"

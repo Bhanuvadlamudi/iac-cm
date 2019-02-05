@@ -15,10 +15,10 @@ class Provider:
 				) 
 
 class Resource:
-	def __init__(self, rdict):
+	def __init__(self, rdict, dir_path):
 		self.name = str( rdict['name'])
 		self.ami = str( rdict['ami'])
-		self.key_name = str( rdict['key_name'])
+		self.key_name = str( rdict['key_name'].split('.')[0])
 
 		if ( ('instance_type' not in rdict) or 	(not rdict['instance_type'].strip())):
 			self.instance_type = "t1.micro"
@@ -26,14 +26,14 @@ class Resource:
 			self.instance_type = str( rdict['instance_type'])
 
 		self.tags = Tags({'Name': self.name})
-		self.vpc_security_group_ids = Vpc(["${aws_security_group.Auto2.id}"])
+		self.vpc_security_group_ids = Vpc(["${aws_security_group.Auto.id}"])
 		self.connection = Connection({
 			                'type': "ssh",
 			                'user': "ubuntu",
-			                'private_key': 'file(var.ssh_key)',
-			                'agent': "false" 
+			                'private_key': rdict['key_name'],
+			                'agent': 'false' 
 						  })
-		self.provisioner = Provisioner( {'command':"test1"} )
+		self.provisioner = Provisioner( "local-exec",dir_path, rdict['key_name'] )
 
 	def __str__(self):
 		return ("resource \"aws_instance\" \""+self.name+ "\" {" 
@@ -43,18 +43,10 @@ class Resource:
 				+ "\n\t"+str(self.tags)
 				+ "\n\t"+str(self.vpc_security_group_ids)
 				+ "\n\t"+str(self.connection)
-				#+ "\n\t"+str(self.provisioner)
+				+ "\n\t"+str(self.provisioner)
 				+ "\n}"
 				) 
 
-class Provisioner:
-	def __init__(self,pdict):
-		self.command=str(pdict['command'])
-
-	def __str__(self):
-		return ("provisioner \"local-exec\" {"
-			+ "\n\tcommand = \"" + str(self.command) + "\""
-			+ "\n\t}")
 
 
 class Tags:
@@ -78,7 +70,7 @@ class Connection:
 		return ("connection {" 
 				+ "\n\t\ttype = \"" + self.type + "\""
 				+ "\n\t\tuser = \"" + self.user + "\"" 
-				+ "\n\t\tprivate_key = \"${" + self.private_key + "}\""
+				+ "\n\t\tprivate_key = \"" + self.private_key + "\""
 				+ "\n\t\tagent ="  + str(self.agent)  
 				+ "\n\t}"
 				) 
@@ -121,8 +113,19 @@ class Output:
 				+ "\n\tvalue = \"${aws_instance." + self.name + ".public_ip}\""  
 				+ "\n}"
 			)
-"""
-output "ip2" {
- value =  "${aws_instance.Auto.public_ip}"
-}
-"""
+
+
+class Provisioner:
+  def __init__(self, name, dir_path, key_name):
+  	self.name = name 
+  	self.dir_path = dir_path
+  	self.key_name = key_name
+  	
+
+  def __str__(self):
+  	return ("provisioner " 
+				+ "\""+self.name+"\" {"
+				+ "\n\t\tcommand = \"sleep 30; ANSIBLE_HOST_KEY_CHECKING=False ansible-playbook -v -i '${self.public_ip},' --private-key " + self.dir_path + "/ansible/"+ self.key_name + " " + self.dir_path +  "/ansible/init.yaml -e 'ansible_python_interpreter=/usr/bin/python3'\""
+				+ "\n}"
+			)
+

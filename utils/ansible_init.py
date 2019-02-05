@@ -11,8 +11,8 @@ def ansible_intialize(config):
 	#add initialize github task
 	git_task = getGitTask(appConfig['git_url'], SRC_DEST)
 	app_task = getAppTask(appConfig['init_file'], SRC_DEST)
-	tasks = ['1',git_task, app_task]
-	print(yaml.safe_dump(tasks, default_flow_style=False))
+	tasks = [git_task, app_task]
+	#print(yaml.safe_dump(tasks, default_flow_style=False))
 
 	with open(ANSIBLE_FILE, 'w') as outfile:
 		yaml.dump(tasks, outfile, default_flow_style=False)
@@ -24,17 +24,10 @@ def getAppTask(file_name,dest_folder):
 	task['become'] = "True"
 	task['become_method'] = "sudo"
 	task['remote_user'] ="ubuntu"
-	task['shell'] = str("nohup python") + str(dest_folder) + str(file_name)+ str("&")
+	task['shell'] = str("nohup python3 ") + str(dest_folder) + str(file_name)+" "+ str("&")
 	return task
 
-"""
-- 
-    name : "run flask app"
-    become: True
-    become_method: sudo
-    remote_user: ubuntu
-    shell: "nohup python /src/testapp/test.py &"
-"""
+
 
 
 def getGitTask(repo_url, dest_folder):

@@ -1,3 +1,3 @@
-output "ip2" {
- value =  "${aws_instance.Auto.public_ip}"
+output "deploy_ip"{
+	value = "${aws_instance.deploy.public_ip}"
 }

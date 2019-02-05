@@ -1,21 +1,15 @@
 inputs:
-  key_name: "key.pem"
+  app:
+    git_url: "https://github.com/Bhanuvadlamudi/testapp"
+    init_file: "test.py"
+
   provider: 
-    aws_access_key_id: "a235rgfeded123"
-    aws_security_key_id: " dfbjkbfjkbf"
-    region: "jdfhwuf"
+    access_key: "AKIAIXNBKMUYYIGZPIIA"
+    secret_key: "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"
+    region: "us-east-1"
   resources:
     -
-      name: "hellooo"
-      ami: "2jh2h"
-      key_name: "key.pem"
-      instance_type: " "
-
-
-
-
-
-   
-
-    
-
+      name: "deploy"
+      ami: "ami-0ac019f4fcb7cb7e6"
+      key_name: "hello.pem"
+      instance_type: "t2.micro"

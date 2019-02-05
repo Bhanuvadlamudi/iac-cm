@@ -9,14 +9,20 @@
       become: True
       become_method: sudo
       remote_user: ubuntu
-      raw: apt-get update  && apt-get install -y python python-pip
+      raw: apt-get update  && apt-get install -y python3 python3-pip
 
     - name: "install nginx"
       become: True
+      become_method: sudo
       apt: name=nginx state=present
-    
-    -
-      name: "install flask"
+      
+
+    #- name: install gunicorn
+    #  apt:  name=gunicorn state=latest update_cache=yes
+    #  become_method: sudo
+    #  become: True
+
+    - name: "install flask"
       pip: name=flask state=present
       become: True
     
@@ -26,13 +32,19 @@
 
 
     - name: "Deploy app"
-      include_tasks: deploy.yaml
+      include_tasks: test.yaml
+
+    #- name: set the gunicorn conf file
+     # template: src=gunicorn.template.j2 dest=/etc/gunicorn.d/hello.conf
+
+    #- name: ensure gunicorn is running
+    #  service: name=gunicorn state=restarted
 
     - name: "Configure nginx"
       include_tasks: nginx.yaml
 
   handlers:
     - name: restart nginx
-      action: service name=nginx state=restarted 
+      action: service name=nginx state=restarted
       become: True
       become_method: sudo

@@ -8,7 +8,7 @@ OUT_FILE  = "./terraform/output.tf"
 
 """
 """
-def terr_intialize(config):
+def terr_intialize(config, dir_path):
 
 	#Remove if files exits
 	delete_file(MAIN_FILE)
@@ -17,8 +17,8 @@ def terr_intialize(config):
 
 
 	#---------------adding to var.tf ------------
-	key_name = config['inputs']['key_name']
-	add_variable('ssh_key','hello.pem')
+	#key_name = config['inputs']['key_name']
+	#add_variable('ssh_key',key_name)
 	add_variable('http_port','80')
 	add_variable('ssh_port','22')
 
@@ -26,7 +26,7 @@ def terr_intialize(config):
 	#retrieving provider part
 	provider = parse_provider(config['inputs']['provider'])
 	#retrieving resources part
-	resources = parse_resources(config['inputs']['resources'], key_name)
+	resources = parse_resources(config['inputs']['resources'], dir_path)
 
 
 def add_variable(name, default_value):
@@ -40,16 +40,15 @@ def parse_provider(pdict):
 	append_to_file(MAIN_FILE, str(provider) )
 	return provider
 
-def parse_resources(resources, key_name):
+def parse_resources(resources, dir_path):
 	#print(resources)
 	for resource in resources:
-		parse_resource(resource, key_name)
+		parse_resource(resource, dir_path)
 
 
-def parse_resource(resource, key_name):
+def parse_resource(resource, dir_path):
 	#print (resource)
-	resource['key_name']= key_name
-	resource_out = terraform_util.Resource(resource)
+	resource_out = terraform_util.Resource(resource, dir_path)
 	append_to_file(MAIN_FILE, str(resource_out) )
 
 	output_var = terraform_util.Output(resource['name'])
