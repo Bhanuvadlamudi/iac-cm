@@ -1,0 +1,18 @@
+
+#User Input 
+
+inputs:
+  app:
+    git_url: " "   #Repo of flask application 
+    init_file: " " #application name like 'test.py'   
+
+  provider: 
+    access_key: " "
+    secret_key: " "
+    region: "us-east-1"
+  resources:
+    -
+      name: "Deploy"     # Name of the instance
+      ami: "ami-0ac019f4fcb7cb7e6"    
+      key_name: "example.pem"   #please follow instructions on read.MD file to understand key_name give your value.
+      instance_type: "t2.micro"   # instance type offers different compute, memory, and storage capabilities and are grouped in instance
