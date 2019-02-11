@@ -34,19 +34,23 @@ What you will need:
 
 ### Clone
 
-- Clone this repo to your local machine using `git clone https://github.com/Bhanuvadlamudi/iac-cm`
-- You can install Terraform and Ansible using `./install.sh`
-### Setup
-After following the getting started steps and installing terraform and ansible. Give the input of `config.yaml` file. 
+Clone this repository to your local machine using the following command:
 
 ```
-vi config.yaml
+git clone https://github.com/Bhanuvadlamudi/iac-cm
 ```
+### Setup steps
+1. Run the "install.sh" file which will install the requried tools for IAC (Terraform) and CM (Ansible)
+```
+./install.sh
+```
+2. Modify the "config.yaml" file as per the comments mentioned inside the file
+
 
 ![screenshot from 2019-02-05 22-21-35](https://user-images.githubusercontent.com/20710319/52318861-884a9a80-2994-11e9-9035-e4555c6607da.png)
 ---
 
-## Running the script
+3. Run the script "deploy.sh" which will perform all the requried steps.
 
 ```
 ./deploy.sh
@@ -56,8 +60,8 @@ vi config.yaml
 ---
 ### To delete created resources
 ```
-cd terraform
-terraform destroy 
+./destroy.sh
+
 ```
 
 
