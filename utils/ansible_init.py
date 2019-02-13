@@ -17,7 +17,6 @@ def ansible_intialize(config):
 	with open(ANSIBLE_FILE, 'w') as outfile:
 		yaml.dump(tasks, outfile, default_flow_style=False)
 
-
 def getAppTask(file_name,dest_folder):
 	task={}
 	task['name'] = "run flask app"
@@ -26,9 +25,6 @@ def getAppTask(file_name,dest_folder):
 	task['remote_user'] ="ubuntu"
 	task['shell'] = str("nohup python3 ") + str(dest_folder) + str(file_name)+" "+ str("&")
 	return task
-
-
-
 
 def getGitTask(repo_url, dest_folder):
 	task= {}

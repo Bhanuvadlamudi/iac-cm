@@ -12,7 +12,4 @@
     name: link nginx config
     action: file src=/etc/nginx/sites-available/nginx.conf dest=/etc/nginx/sites-enabled/nginx.conf state=link
   
-  #- name: restart nginx
-   # action: service name=nginx state=restarted 
-    #become: True
-    #become_method: sudo
+ 

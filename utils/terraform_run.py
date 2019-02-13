@@ -41,7 +41,6 @@ def parse_provider(pdict):
 	return provider
 
 def parse_resources(resources, dir_path):
-	#print(resources)
 	for resource in resources:
 		parse_resource(resource, dir_path)
 
@@ -51,13 +50,13 @@ def parse_resource(resource, dir_path):
 	resource_out = terraform_util.Resource(resource, dir_path)
 	append_to_file(MAIN_FILE, str(resource_out) )
 
-	output_var = terraform_util.Output(resource['name'])
+	output_var = terraform_util.Output(resource)
 	append_to_file(OUT_FILE, str(output_var) )
 
 
 '''
 appeds given data to a file.
-inputs "file_name: the file which to write, data: data to be appended"       
+inputs "file_name: the file which to write, data: data to be appended"
 '''
 def append_to_file(file_name, data):
 	fout = open(file_name, "a")
@@ -69,7 +68,3 @@ def delete_file(file_name):
 		os.remove(file_name)
 	else:
 		print("The file does not exist")
-
-
-
-

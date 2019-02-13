@@ -1,4 +1,4 @@
-hello.pem
-terr.pem
+*.pem
+*.tfstate
 utils/__pycache__/
 terraform/.terraform
