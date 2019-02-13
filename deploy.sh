@@ -1,19 +1,20 @@
 
+#!/bin/bash
+
+# Fail on error
+set -e
 
 echo "initializing scripts"
 python3 run.py
 
 
 echo "started provisioning the infrastructure"
-cd terraform 
+cd terraform
 terraform init
 terraform validate
 echo  "********* validated **********"
 terraform plan
-terraform apply -auto-approve 
+terraform apply -auto-approve
 
 echo "success provisioning the infrastructure"
 terraform output
-
-
-
