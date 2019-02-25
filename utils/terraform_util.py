@@ -120,7 +120,7 @@ class LaunchConfiguration:
 			self.instance_type = str( rdict['instance_type'])
 		self.user_data = ("user_data = <<-EOF"
 	                                   + "\n\t\t\t\t\t\t\t#!/bin/bash"
-									   + "\n\t\t\t\t\t\t\tnohup python3 /src/testapp/test.py &"
+									   + "\n\t\t\t\t\t\t\tnohup python /src/smarthotels/run.py > /usr/local/share/iac-cm.out &"
 									   + "\n\t\t\t\t\t\t\tEOF"
 						  )
 		self.lifecycle = ("lifecycle {"
@@ -259,6 +259,6 @@ class Provisioner:
   def __str__(self):
   	return ("provisioner "
 				+ "\""+self.name+"\" {"
-				+ "\n\t\tcommand = \"sleep 30; ANSIBLE_HOST_KEY_CHECKING=False ansible-playbook -v -i '${self.public_ip},' --private-key " + self.dir_path + "/ansible/"+ self.key_name + " " + self.dir_path +  "/ansible/init.yaml -e 'ansible_python_interpreter=/usr/bin/python3'\""
+				+ "\n\t\tcommand = \"sleep 30; ANSIBLE_HOST_KEY_CHECKING=False ansible-playbook -v -i '${self.public_ip},' --private-key " + self.dir_path + "/ansible/"+ self.key_name + " " + self.dir_path +  "/ansible/init.yaml -e 'ansible_python_interpreter=/usr/bin/python'\""
 				+ "\n\t}"
 			)

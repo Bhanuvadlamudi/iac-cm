@@ -2,12 +2,12 @@ provider "aws" {
 	profile = "iac-cm-user"
 	region = "us-east-1"
 }
-resource "aws_instance" "flask-app-dev" {
+resource "aws_instance" "flask-app" {
 	ami = "ami-0ac019f4fcb7cb7e6"
 	key_name = "iac-cm-key"
-	instance_type = "t2.micro"
+	instance_type = "t2.medium"
 	tags = {
-		Name="flask-app-dev"
+		Name="flask-app"
 	}
 	vpc_security_group_ids = ["${aws_security_group.Auto.id}"]
 	connection {
@@ -17,7 +17,7 @@ resource "aws_instance" "flask-app-dev" {
 		agent =false
 	}
 	provisioner "local-exec" {
-		command = "sleep 30; ANSIBLE_HOST_KEY_CHECKING=False ansible-playbook -v -i '${self.public_ip},' --private-key /home/bhanu/Documents/iac-cm/newproj/iac-cm/ansible/iac-cm-key.pem /home/bhanu/Documents/iac-cm/newproj/iac-cm/ansible/init.yaml -e 'ansible_python_interpreter=/usr/bin/python3'"
+		command = "sleep 30; ANSIBLE_HOST_KEY_CHECKING=False ansible-playbook -v -i '${self.public_ip},' --private-key /home/bhanu/projects/iac-cm/ansible/iac-cm-key.pem /home/bhanu/projects/iac-cm/ansible/init.yaml -e 'ansible_python_interpreter=/usr/bin/python'"
 	}
 }
 resource "aws_elb" "flask-app-prod-elb" {
@@ -39,13 +39,13 @@ resource "aws_elb" "flask-app-prod-elb" {
 	}
 }
 resource "aws_launch_configuration" "flask-app-prod-launch-config" {
-	image_id = "ami-0002811a3ff2600ca"
+	image_id = "ami-0651b732ffc456ddb"
 	instance_type = "t2.micro"
 	security_groups = ["${aws_security_group.Auto.id}"]
 	key_name = "iac-cm-key"
 	user_data = <<-EOF
 							#!/bin/bash
-							nohup python3 /src/testapp/test.py &
+							nohup python /src/smarthotels/run.py > /usr/local/share/iac-cm.out &
 							EOF
 	lifecycle {
 		create_before_destroy = true
