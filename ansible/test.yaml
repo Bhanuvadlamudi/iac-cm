@@ -1,13 +1,31 @@
 - git:
     accept_hostkey: 'yes'
     clone: 'yes'
-    dest: /src/testapp/
-    repo: https://github.com/Bhanuvadlamudi/testapp
+    dest: /src/smarthotels/
+    repo: https://github.com/Bhanuvadlamudi/smarthotels
     update: 'no'
     version: master
   name: clone git repository
+- include_tasks: nginx.yaml
+  name: Configure nginx
+- become: 'True'
+  become_method: sudo
+  name: req
+  pip:
+    requirements: /src/smarthotels/application/requirements.txt
+  remote_user: ubuntu
+- become: 'True'
+  become_method: sudo
+  name: spacy en
+  raw: nohup python -m spacy download en &
+  remote_user: ubuntu
+- become: 'True'
+  become_method: sudo
+  name: nltk
+  raw: nohup python -m nltk.downloader vader_lexicon -d /usr/local/share/nltk_data&
+  remote_user: ubuntu
 - become: 'True'
   become_method: sudo
   name: run flask app
   remote_user: ubuntu
-  shell: nohup python3 /src/testapp/test.py &
+  shell: nohup python /src/smarthotels/run.py > /usr/local/share/iac-cm.out &

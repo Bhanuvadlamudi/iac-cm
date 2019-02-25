@@ -1,8 +1,8 @@
 # Input options for terraform
 inputs:
   app:
-    git_url: "https://github.com/Bhanuvadlamudi/testapp"   # Repo of flask application
-    init_file: "test.py" # Application name like 'test.py'
+    git_url: "https://github.com/Bhanuvadlamudi/smarthotels"   # Repo of flask application
+    init_file: "run.py" # Application name like 'test.py'
 
   provider:
     profile: "iac-cm-user"
@@ -10,14 +10,14 @@ inputs:
 
   resources:
     -
-      name: "flask-app-dev"     # Name of the instances
+      name: "flask-app"     # Name of the instances
       highly_available: false  # Creates Just EC2
       ami: "ami-0ac019f4fcb7cb7e6"
       key_name: "iac-cm-key.pem"   # Please follow instructions on read.MD file to understand key_name give your value.
+      instance_type: "t2.medium"   # Instance type offers different compute, memory, and storage capabilities and are grouped in instance
+    -
+      name: "flask-app-prod"     # Name of the instances
+      highly_available: true  # Creates an ASG and ELB for you
+      ami: "ami-0651b732ffc456ddb"
+      key_name: "iac-cm-key.pem"   # Please follow instructions on read.MD file to understand key_name give your value.
       instance_type: "t2.micro"   # Instance type offers different compute, memory, and storage capabilities and are grouped in instance
-  #  -
-  #    name: "flask-app-prod"     # Name of the instances
-  #    highly_available: true  # Creates an ASG and ELB for you
-  #    ami: "ami-0002811a3ff2600ca"
-  #    key_name: "iac-cm-key.pem"   # Please follow instructions on read.MD file to understand key_name give your value.
-  #    instance_type: "t2.micro"   # Instance type offers different compute, memory, and storage capabilities and are grouped in instance
